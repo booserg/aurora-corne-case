@@ -29,10 +29,16 @@ print(f"Shape object type: {type(shape_obj)}")
 from cadquery.occ_impl.shapes import Face
 
 if isinstance(shape_obj, Face):
-    # Create a solid by extruding the face using CadQuery's method
-    extruded_solid = cq.Solid.extrudeLinear(shape_obj, cq.Vector(0, 0, 6))
-    result = cq.Workplane("XY").add(extruded_solid)
-    print("Successfully extruded face to create solid")
+    # Create a workplane with the face and offset it by 1mm
+    # wp = cq.Workplane("XY").add(shape_obj)
+    
+    # Get the outer wire and offset it
+    outer_wire = shape_obj.outerWire()
+    offset_wire = outer_wire.offset2D(1.0)
+    
+    # Create a new face from the offset wire and extrude
+    result = cq.Workplane("XY").add(offset_wire).toPending().extrude(6)
+    print("Successfully offset face by 1mm and extruded to create solid")
 else:
     raise ValueError(f"Unexpected shape type: {type(shape_obj)}")
 
