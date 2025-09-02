@@ -29,9 +29,6 @@ print(f"Shape object type: {type(shape_obj)}")
 from cadquery.occ_impl.shapes import Face
 
 if isinstance(shape_obj, Face):
-    # Create a workplane with the face and offset it by 1mm
-    # wp = cq.Workplane("XY").add(shape_obj)
-    
     # Get the outer wire and offset it
     outer_wire = shape_obj.outerWire()
     offset_wire = outer_wire.offset2D(1.0)
